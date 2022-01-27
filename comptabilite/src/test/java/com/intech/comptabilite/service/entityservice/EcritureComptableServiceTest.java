@@ -2,6 +2,7 @@ package com.intech.comptabilite.service.entityservice;
 
 import java.math.BigDecimal;
 
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -49,5 +50,100 @@ public class EcritureComptableServiceTest {
         vEcriture.getListLigneEcriture().add(this.createLigne(2, "1", "2"));
         Assertions.assertFalse(ecritureComptableService.isEquilibree(vEcriture));
     }
+    
+    @Test
+    public void testGetTotalCreditShouldReturnTheTotalCredit() {
+        EcritureComptable vEcriture;
+        vEcriture = new EcritureComptable();
+        
+        String firstDecimalString = "125.4";
+        String secondDecimalString = "10.6";
+        
+        BigDecimal vfirstCredit =  new BigDecimal(firstDecimalString); 
+        BigDecimal vsecondCredit = new BigDecimal(secondDecimalString);
+        
+        
+        BigDecimal totalCreditExcepted = vfirstCredit.add(vsecondCredit);
+        
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, firstDecimalString));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, secondDecimalString));
+        
+        BigDecimal result = ecritureComptableService.getTotalCredit(vEcriture);
+       
+        Assertions.assertEquals(result, totalCreditExcepted);
+
+    }
+    
+    @Test
+    public void testGetTotalCreditShouldReturnZeroIfNoCredit() {
+        EcritureComptable vEcriture;
+        vEcriture = new EcritureComptable();               
+        
+        BigDecimal totalCreditExcepted = BigDecimal.ZERO;
+        
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, null));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, null));
+        
+        BigDecimal result = ecritureComptableService.getTotalCredit(vEcriture);
+       
+        Assertions.assertEquals(result, totalCreditExcepted);
+
+    }
+    
+    @Test
+    public void testGetTotalDebitShouldReturnTheTotalDebit() {
+        EcritureComptable vEcriture;
+        vEcriture = new EcritureComptable();
+        
+        String firstDecimalString = "125.4";
+        String secondDecimalString = "10.6";
+        
+        BigDecimal vfirstDebit =  new BigDecimal(firstDecimalString); 
+        BigDecimal vsecondDebit = new BigDecimal(secondDecimalString);
+        
+        
+        BigDecimal totalDebitExcepted = vfirstDebit.add(vsecondDebit);
+        
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, firstDecimalString, null));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, secondDecimalString,null ));
+        
+        BigDecimal result = ecritureComptableService.getTotalDebit(vEcriture);
+       
+        Assertions.assertEquals(result, totalDebitExcepted);
+
+    }
+    
+    @Test
+    public void testGetTotalDebitShouldReturnZeroIfNoDebit() {
+        EcritureComptable vEcriture;
+        vEcriture = new EcritureComptable();               
+        
+        BigDecimal totalDebitExcepted = BigDecimal.ZERO;
+        
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, null));
+        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, null));
+        
+        BigDecimal result = ecritureComptableService.getTotalDebit(vEcriture);
+       
+        Assertions.assertEquals(result, totalDebitExcepted);
+
+    }
+    
+//    @Test
+//    public void testInsertEcritureComptable() {
+//        EcritureComptable vEcriture;
+//        vEcriture = new EcritureComptable();
+//
+//        vEcriture.setReference("AC-2016/00001");
+//        vEcriture.setId( (new Random()).nextInt(3712));
+//        vEcriture.setJournal(new JournalComptable("AC", "Achat"));
+//        vEcriture.setDate(new Date());
+//        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, null));
+//        
+//        ecritureComptableService.insertEcritureComptable(vEcriture);
+//              
+//        Assertions.assertDoesNotThrow(() -> ecritureComptableService.getEcritureComptableByRef("1"));
+
+//    }
 
 }
