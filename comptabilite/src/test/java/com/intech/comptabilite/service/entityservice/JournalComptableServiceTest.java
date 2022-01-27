@@ -9,6 +9,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import com.intech.comptabilite.model.EcritureComptable;
 import com.intech.comptabilite.model.JournalComptable;
@@ -21,14 +22,13 @@ public class JournalComptableServiceTest {
 	@Autowired
 	JournalComptableService journalComptableService;
 	
-	@MockBean
+	@SpyBean
 	JournalComptableRepository journalComptableRepository;
 	
 	
     @Test
     public void testGetByCodeShouldReturnJournalCompteComptableIfExists() {
-       JournalComptable journalComptable = new JournalComptable("A","B");
-       
+       JournalComptable journalComptable = new JournalComptable("A","B");      
        JournalComptable journalComptable2 = new JournalComptable("C","D");    
        
        List<JournalComptable> listJournalComptables = new ArrayList<JournalComptable>();
@@ -45,7 +45,6 @@ public class JournalComptableServiceTest {
     @Test
     public void testGetByCodeShouldReturnNullIfNotExists() {
        JournalComptable journalComptable = new JournalComptable("A","B");
-       
        JournalComptable journalComptable2 = new JournalComptable("C","D");    
        
        List<JournalComptable> listJournalComptables = new ArrayList<JournalComptable>();

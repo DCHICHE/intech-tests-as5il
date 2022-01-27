@@ -9,9 +9,10 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import com.intech.comptabilite.model.CompteComptable;
-import com.intech.comptabilite.model.EcritureComptable;
+import com.intech.comptabilite.model.JournalComptable;
 import com.intech.comptabilite.repositories.CompteComptableRepository;
 
 @SpringBootTest
@@ -20,7 +21,7 @@ public class CompteComptableServiceTest {
 	@Autowired 
 	CompteComptableService compteComptableService;
 	
-	@MockBean 
+	@MockBean
 	private CompteComptableRepository compteComptableRepository;
 
 	    @Test

@@ -13,6 +13,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import com.intech.comptabilite.model.CompteComptable;
 import com.intech.comptabilite.model.EcritureComptable;
@@ -24,11 +25,13 @@ import com.intech.comptabilite.service.exceptions.NotFoundException;
 @SpringBootTest
 public class EcritureComptableServiceTest {
 	
+
+	@Autowired
+	private EcritureComptableService ecritureComptableService;
+	
 	@MockBean
 	EcritureComptableRepository ecritureComptableRepository;
 	
-	@Autowired
-	private EcritureComptableService ecritureComptableService;
 
     private LigneEcritureComptable createLigne(Integer pCompteComptableNumero, String pDebit, String pCredit) {
         BigDecimal vDebit = pDebit == null ? null : new BigDecimal(pDebit);
@@ -157,12 +160,12 @@ public class EcritureComptableServiceTest {
     public void unitTestGetEcritureComptableByRefShouldThrowIfRefNotExist() {
     	EcritureComptable ecritureComptable = new EcritureComptable();
     	String refString = "AC-2016/00001";
+        String badRefString = "AAAAAAA";
     	ecritureComptable.setReference(refString);
     	
         Mockito.when(ecritureComptableRepository.getByReference(refString))
        	      .thenReturn(java.util.Optional.of(ecritureComptable));
        
-       String badRefString = "AAAAAAA";
        
        Assertions.assertThrows(NotFoundException.class, () -> ecritureComptableService.getEcritureComptableByRef(badRefString));
 
@@ -184,7 +187,6 @@ public class EcritureComptableServiceTest {
     	Assertions.assertEquals(ecritureComptables.get(0).getId(), exComptable.getId());
 
     }
-    
-
+   
 
 }
