@@ -22,7 +22,7 @@ public class JournalComptableServiceTest {
 	@Autowired
 	JournalComptableService journalComptableService;
 	
-	@SpyBean
+	@MockBean
 	JournalComptableRepository journalComptableRepository;
 	
 	
