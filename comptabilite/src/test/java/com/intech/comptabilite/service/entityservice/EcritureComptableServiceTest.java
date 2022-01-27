@@ -1,20 +1,31 @@
 package com.intech.comptabilite.service.entityservice;
 
 import java.math.BigDecimal;
-
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import com.intech.comptabilite.model.CompteComptable;
 import com.intech.comptabilite.model.EcritureComptable;
+import com.intech.comptabilite.model.JournalComptable;
 import com.intech.comptabilite.model.LigneEcritureComptable;
+import com.intech.comptabilite.repositories.EcritureComptableRepository;
+import com.intech.comptabilite.service.exceptions.NotFoundException;
 
 @SpringBootTest
 public class EcritureComptableServiceTest {
+	
+	@MockBean
+	EcritureComptableRepository ecritureComptableRepository;
 	
 	@Autowired
 	private EcritureComptableService ecritureComptableService;
@@ -129,21 +140,51 @@ public class EcritureComptableServiceTest {
 
     }
     
-//    @Test
-//    public void testInsertEcritureComptable() {
-//        EcritureComptable vEcriture;
-//        vEcriture = new EcritureComptable();
-//
-//        vEcriture.setReference("AC-2016/00001");
-//        vEcriture.setId( (new Random()).nextInt(3712));
-//        vEcriture.setJournal(new JournalComptable("AC", "Achat"));
-//        vEcriture.setDate(new Date());
-//        vEcriture.getListLigneEcriture().add(this.createLigne(1, null, null));
-//        
-//        ecritureComptableService.insertEcritureComptable(vEcriture);
-//              
-//        Assertions.assertDoesNotThrow(() -> ecritureComptableService.getEcritureComptableByRef("1"));
+    @Test
+    public void unitTestGetEcritureComptableByRefShouldReturnExistEcritureComptable() {
+    	EcritureComptable ecritureComptable = new EcritureComptable();
+    	String refString = "AC-2016/00001";
+    	ecritureComptable.setReference(refString);
+    	
+       Mockito.when(ecritureComptableRepository.getByReference(refString))
+       	      .thenReturn(java.util.Optional.of(ecritureComptable));
+       
+       Assertions.assertDoesNotThrow(() -> ecritureComptableService.getEcritureComptableByRef(refString));
 
-//    }
+    }
+    
+    @Test
+    public void unitTestGetEcritureComptableByRefShouldThrowIfRefNotExist() {
+    	EcritureComptable ecritureComptable = new EcritureComptable();
+    	String refString = "AC-2016/00001";
+    	ecritureComptable.setReference(refString);
+    	
+        Mockito.when(ecritureComptableRepository.getByReference(refString))
+       	      .thenReturn(java.util.Optional.of(ecritureComptable));
+       
+       String badRefString = "AAAAAAA";
+       
+       Assertions.assertThrows(NotFoundException.class, () -> ecritureComptableService.getEcritureComptableByRef(badRefString));
+
+    }
+    
+    @Test
+    public void unitTestGetListEcritureComptable() {
+    	List<EcritureComptable> ecritureComptables = new ArrayList<EcritureComptable>();
+    	EcritureComptable exComptable = new EcritureComptable();
+    	exComptable.setId(3712);
+    	ecritureComptables.add(exComptable);
+    	ecritureComptables.add(new EcritureComptable());
+    	
+    	Mockito.when(ecritureComptableRepository.findAll()).thenReturn(ecritureComptables);
+    	
+    	List<EcritureComptable> resuEcritureComptables = ecritureComptableService.getListEcritureComptable();
+    	
+    	Assertions.assertEquals(ecritureComptables.size(), resuEcritureComptables.size());
+    	Assertions.assertEquals(ecritureComptables.get(0).getId(), exComptable.getId());
+
+    }
+    
+
 
 }
