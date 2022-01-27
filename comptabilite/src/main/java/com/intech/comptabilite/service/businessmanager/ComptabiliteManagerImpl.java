@@ -139,6 +139,19 @@ public class ComptabiliteManagerImpl implements ComptabiliteManager {
 
         // TODO ===== RG_Compta_5 : Format et contenu de la référence
         // vérifier que l'année dans la référence correspond bien à la date de l'écriture, idem pour le code journal...
+        
+        
+        JournalComptable journalComptable = pEcritureComptable.getJournal();
+        String ref = pEcritureComptable.getReference();
+        Calendar calendar = Calendar.getInstance();
+        
+        calendar.setTime( pEcritureComptable.getDate() );
+        
+        if( !ref.split("-")[1].split("/")[0].equals(String.valueOf( calendar.get( Calendar.YEAR ) ) ) ) 
+        	throw new FunctionalException( "La date de la ref ne correspond pas à la date de l'écriture." );
+        
+        if( !ref.split("-")[0].equals(journalComptable.getCode().toString() ) ) 
+        	throw new FunctionalException( "Le code journal de la ref ne correspond pas ." );
     }
 
 
